@@ -16,3 +16,18 @@ jobs:
         with:
           name: code  
           path: .
+    Docker-image:
+         runs-on: ubuntu-latest
+         needs: [Build]
+         permissions:
+          packages: write
+        steps:
+        - name: Download code
+        - uses: actions/download-artifact@v3
+          with:
+            name: code
+            path: .
+        - name: Build Docker
+          run: cmod +x ci/build-docker.sh && ci/build-docker.sh
+        - name: push docker
+          run: cmod +x ci/push-docker.sh && ci/push-docker.sh
